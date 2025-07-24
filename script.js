@@ -4,6 +4,8 @@ const step1 = document.getElementById("step1");
 const step2 = document.getElementById("step2");
 const step3 = document.getElementById("step3");
 
+const prefSelect = document.getElementById("prefSelect");
+const nameInput = document.getElementById("nameInput");
 let selectedPref = "";
 let userName = "";
 
@@ -19,7 +21,7 @@ const prefectures = [
   "福岡県", "佐賀県", "長崎県", "熊本県", "大分県", "宮崎県", "鹿児島県", "沖縄県"
 ];
 
-// スプラッシュ → ステップ1へ
+// スプラッシュ処理
 window.onload = () => {
   splash.style.opacity = 1;
   setTimeout(() => {
@@ -28,32 +30,35 @@ window.onload = () => {
       splash.style.display = "none";
       fixedHeader.style.display = "block";
       step1.style.display = "block";
+      populatePrefOptions();
     }, 1000);
   }, 1000);
-
-  generatePrefectureList();
 };
 
-// 都道府県ボタンを生成
-function generatePrefectureList() {
-  const list = document.getElementById("prefectureList");
+// プルダウンに都道府県を追加
+function populatePrefOptions() {
   prefectures.forEach(pref => {
-    const img = document.createElement("img");
-    img.src = `images/${pref}.png`;
-    img.alt = pref;
-    img.className = "prefImage";
-    img.onclick = () => {
-      selectedPref = pref;
-      step1.style.display = "none";
-      step2.style.display = "block";
-    };
-    list.appendChild(img);
+    const opt = document.createElement("option");
+    opt.value = pref;
+    opt.textContent = pref;
+    prefSelect.appendChild(opt);
   });
 }
 
-// 名前 → OK → ハンコ生成
+// 都道府県→OK→名前入力へ
+document.getElementById("toName").onclick = () => {
+  if (!prefSelect.value) {
+    alert("都道府県を選んでください");
+    return;
+  }
+  selectedPref = prefSelect.value;
+  step1.style.display = "none";
+  step2.style.display = "block";
+};
+
+// 名前入力→OK→ハンコ表示へ
 document.getElementById("nameOk").onclick = () => {
-  userName = document.getElementById("nameInput").value.trim();
+  userName = nameInput.value.trim();
   if (!userName) {
     alert("名前を入力してください");
     return;
@@ -61,10 +66,10 @@ document.getElementById("nameOk").onclick = () => {
   step2.style.display = "none";
   step3.style.display = "block";
 
-  setTimeout(drawHanko, 2000); // 2秒遅れて描画
+  setTimeout(drawHanko, 2000); // 2秒後に描画
 };
 
-// ハンコ描画
+// ハンコ生成
 function drawHanko() {
   const canvas = document.getElementById("hankoCanvas");
   const ctx = canvas.getContext("2d");
@@ -87,10 +92,23 @@ function drawHanko() {
     }
 
     ctx.fillText(userName, 150, 150);
+
+    // SNSリンク更新
+    const shareText = encodeURIComponent(`${selectedPref}の印鑑「${userName}」を作りました！`);
+    const pageURL = encodeURIComponent(window.location.href);
+
+    document.getElementById("twitterShare").href =
+      `https://twitter.com/intent/tweet?text=${shareText}&url=${pageURL}`;
+    document.getElementById("lineShare").href =
+      `https://social-plugins.line.me/lineit/share?text=${shareText}&url=${pageURL}`;
+  };
+
+  img.onerror = () => {
+    alert("画像の読み込みに失敗しました。ファイル名や拡張子を確認してください。");
   };
 }
 
-// ダウンロード
+// ダウンロード処理
 document.getElementById("downloadBtn").onclick = () => {
   const canvas = document.getElementById("hankoCanvas");
   const link = document.createElement("a");
