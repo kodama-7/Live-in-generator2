@@ -13,10 +13,14 @@
   <!-- スプラッシュ -->
   <div id="splash">Live In</div>
 
-  <!-- 都道府県選択画面 -->
+  <!-- 都道府県選択 -->
   <div id="step1" class="step">
     <h2>あなたの都道府県は？</h2>
-    <div id="prefectureList" class="grid"></div>
+    <select id="prefSelect">
+      <option value="">選んでください</option>
+    </select>
+    <br><br>
+    <button id="toName">OK</button>
   </div>
 
   <!-- 名前入力 -->
@@ -26,13 +30,21 @@
     <button id="nameOk">OK</button>
   </div>
 
-  <!-- ハンコ生成 -->
+  <!-- ハンコ表示 -->
   <div id="step3" class="step">
     <canvas id="hankoCanvas" width="300" height="300"></canvas><br />
     <button id="downloadBtn">ダウンロード</button>
+
+    <!-- SNS共有ボタン -->
+    <div id="shareArea">
+      <p>SNSでシェアする：</p>
+      <a id="twitterShare" target="_blank">Twitter</a> /
+      <a id="lineShare" target="_blank">LINE</a>
+    </div>
   </div>
 
   <script src="script.js"></script>
 </body>
 </html>
+
 
