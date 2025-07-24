@@ -22,18 +22,19 @@ const prefectures = [
 ];
 
 // スプラッシュ処理
-window.onload = () => {
+window.addEventListener("DOMContentLoaded", () => {
   splash.style.opacity = 1;
+
   setTimeout(() => {
     splash.style.opacity = 0;
     setTimeout(() => {
       splash.style.display = "none";
       fixedHeader.style.display = "block";
       step1.style.display = "block";
-      populatePrefOptions();
+      populatePrefOptions(); // ←ここで呼び出し
     }, 1000);
   }, 1000);
-};
+});
 
 // プルダウンに都道府県を追加
 function populatePrefOptions() {
