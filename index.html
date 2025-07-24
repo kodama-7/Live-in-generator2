@@ -1,126 +1,38 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>動物ハンコジェネレーター</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      text-align: center;
-      margin-top: 30px;
-      background: #fdf5f5;
-    }
-    canvas {
-      margin-top: 20px;
-      border: 1px solid #ccc;
-      background: white;
-    }
-    select, input {
-      font-size: 16px;
-      padding: 6px;
-    }
-    button {
-      margin-top: 10px;
-      font-size: 16px;
-      padding: 8px 16px;
-      background-color: #cc0000;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #a30000;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Live In - 名前ハンコ</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>動物ハンコジェネレーター</h1>
+  <!-- ヘッダー -->
+  <div id="fixedHeader">Live In</div>
 
-  <div id="controls">
-    <label>① 枠の形を選ぶ：</label>
-    <select id="shapeSelect">
-      <option value="usagi">うさぎ</option>
-      <option value="kuma">くま</option>
-      <option value="neko">ねこ</option>
-    </select><br><br>
+  <!-- スプラッシュ -->
+  <div id="splash">Live In</div>
 
-    <label>② 名前を入力：</label>
-    <input type="text" id="nameInput" placeholder="名前を入力"><br><br>
+  <!-- 都道府県選択画面 -->
+  <div id="step1" class="step">
+    <h2>あなたの都道府県は？</h2>
+    <div id="prefectureList" class="grid"></div>
   </div>
 
-  <canvas id="hankoCanvas" width="300" height="300"></canvas><br>
-  <button id="downloadBtn">④ ダウンロード</button>
+  <!-- 名前入力 -->
+  <div id="step2" class="step">
+    <h2>あなたの名前は？</h2>
+    <input type="text" id="nameInput" placeholder="例：もるす" />
+    <button id="nameOk">OK</button>
+  </div>
 
-  <script>
-    const canvas = document.getElementById("hankoCanvas");
-    const ctx = canvas.getContext("2d");
-    const shapeSelect = document.getElementById("shapeSelect");
-    const nameInput = document.getElementById("nameInput");
+  <!-- ハンコ生成 -->
+  <div id="step3" class="step">
+    <canvas id="hankoCanvas" width="300" height="300"></canvas><br />
+    <button id="downloadBtn">ダウンロード</button>
+  </div>
 
-    // 各枠ごとの設定
-    const settings = {
-      usagi: {
-        img: "usagi.png",
-        defaultFontSize: 36,
-        x: 150,
-        y: 160,
-        maxWidth: 180
-      },
-      kuma: {
-        img: "kuma.png",
-        defaultFontSize: 40,
-        x: 150,
-        y: 140,
-        maxWidth: 180
-      },
-      neko: {
-        img: "neko.png",
-        defaultFontSize: 34,
-        x: 150,
-        y: 150,
-        maxWidth: 180
-      }
-    };
-
-    function drawHanko() {
-      const shape = shapeSelect.value;
-      const name = nameInput.value;
-      const setting = settings[shape];
-
-      const img = new Image();
-      img.src = setting.img;
-      img.onload = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0, 300, 300);
-
-        // 自動フォントサイズ調整
-        let fontSize = setting.defaultFontSize;
-        ctx.font = `bold ${fontSize}px serif`;
-
-        while (ctx.measureText(name).width > setting.maxWidth && fontSize > 12) {
-          fontSize -= 1;
-          ctx.font = `bold ${fontSize}px serif`;
-        }
-
-        ctx.fillStyle = "#cc0000";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(name, setting.x, setting.y);
-      };
-    }
-
-    shapeSelect.addEventListener("change", drawHanko);
-    nameInput.addEventListener("input", drawHanko);
-
-    document.getElementById("downloadBtn").addEventListener("click", () => {
-      const link = document.createElement("a");
-      link.download = "hanko.png";
-      link.href = canvas.toDataURL("image/png");
-      link.click();
-    });
-
-    drawHanko(); // 初回描画
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
+
